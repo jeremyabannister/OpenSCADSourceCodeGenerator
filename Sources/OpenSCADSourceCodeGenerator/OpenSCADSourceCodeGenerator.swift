@@ -26,8 +26,8 @@ public struct OpenSCADSourceCodeGenerator {
       generatedSourceCode = "\(translation)cylinder(r1 = \(lowerRadius.asOpenSCADVariable), r2 = \(upperRadius.asOpenSCADVariable), h = \(depth.asOpenSCADVariable)\(resolutionMode.resolutionModificationString));"
     case .polyhedron(position: let position, vertices: let vertices, faces: let faces):
       let translation = OpenSCADSourceCodeGenerator.translationString(for: position)
-      let mappedVertices = vertices.map({ [$0.x, $0.y, $0.z] })
-      generatedSourceCode = "\(translation)polyhedron(points = \(mappedVertices), faces = \(faces));"
+      let verticesDescription = vertices.map({ [$0.x, $0.y, $0.z].map({ $0.asOpenSCADVariable }) }).description.filter({ $0 != "\"" })
+      generatedSourceCode = "\(translation)polyhedron(points = \(verticesDescription), faces = \(faces));"
       
     case .union(position: let position, rawObjects: let rawObjects):
       let translation = OpenSCADSourceCodeGenerator.translationString(for: position)
